@@ -6,24 +6,21 @@ export async function GET(request) {
 
   if (!imageUrl) return new Response('URL missing', { status: 400 });
 
-  // Trik: Mengubah ekstensi .heic menjadi .image agar CDN ByteDance mengirim format yang didukung browser
-  imageUrl = imageUrl.replace('.heic', '.image');
-
   try {
     const response = await fetch(imageUrl, {
       headers: {
-        'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36',
-        'Referer': 'https://www.tiktok.com/', 
+        'User-Agent': 'Mozilla/5.0 (iPhone; CPU iPhone OS 16_0 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/16.0 Mobile/15E148 Safari/604.1',
+        'Referer': 'https://www.tiktok.com/', // Menipu CDN TikTok
       },
     });
 
-    const arrayBuffer = await response.arrayBuffer();
+    const buffer = await response.arrayBuffer();
     const headers = new Headers();
-    headers.set('Content-Type', 'image/jpeg');
+    headers.set('Content-Type', 'image/jpeg'); // Memaksa browser membaca sebagai JPEG
     headers.set('Cache-Control', 'public, max-age=31536000, immutable');
 
-    return new NextResponse(arrayBuffer, { headers });
+    return new NextResponse(buffer, { headers });
   } catch (e) {
-    return new Response('Failed', { status: 500 });
+    return new Response('Error loading image', { status: 500 });
   }
 }
