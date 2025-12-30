@@ -1,0 +1,41 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --background: 2, 6, 23; /* Slate 950 */
+}
+
+body {
+  background-color: rgb(var(--background));
+  color: #f8fafc;
+  font-family: 'Inter', sans-serif;
+  overflow-x: hidden;
+}
+
+/* Fix link warna biru bawaan browser */
+a {
+  color: inherit !important;
+  text-decoration: none !important;
+}
+
+/* Salju di Background */
+.snowflake {
+  position: fixed;
+  top: -5vh;
+  z-index: -5; /* Taruh paling belakang */
+  color: white;
+  opacity: 0.2;
+  pointer-events: none;
+  animation: fall linear infinite;
+}
+
+@keyframes fall {
+  to { transform: translateY(110vh) rotate(360deg); }
+}
+
+/* Custom Scrollbar Premium */
+::-webkit-scrollbar { width: 6px; }
+::-webkit-scrollbar-track { background: transparent; }
+::-webkit-scrollbar-thumb { background: #1e293b; border-radius: 10px; }
+::-webkit-scrollbar-thumb:hover { background: #22d3ee; }
