@@ -3,39 +3,39 @@
 @tailwind utilities;
 
 :root {
-  --background: 2, 6, 23; /* Slate 950 */
+  color-scheme: dark;
 }
 
 body {
-  background-color: rgb(var(--background));
+  background-color: #020617;
   color: #f8fafc;
-  font-family: 'Inter', sans-serif;
-  overflow-x: hidden;
+  -webkit-font-smoothing: antialiased;
 }
 
-/* Fix link warna biru bawaan browser */
-a {
+/* RESET LINK & WARNA BIRU */
+a, a:hover, a:visited, a:active {
   color: inherit !important;
   text-decoration: none !important;
 }
 
-/* Salju di Background */
+/* Animasi Salju Premium di Background */
 .snowflake {
   position: fixed;
-  top: -5vh;
-  z-index: -5; /* Taruh paling belakang */
+  top: -10px;
+  z-index: -1;
   color: white;
-  opacity: 0.2;
+  opacity: 0.15;
   pointer-events: none;
-  animation: fall linear infinite;
+  animation: fall 10s linear infinite;
 }
 
 @keyframes fall {
-  to { transform: translateY(110vh) rotate(360deg); }
+  to { transform: translateY(100vh) rotate(360deg); }
 }
 
-/* Custom Scrollbar Premium */
-::-webkit-scrollbar { width: 6px; }
-::-webkit-scrollbar-track { background: transparent; }
-::-webkit-scrollbar-thumb { background: #1e293b; border-radius: 10px; }
-::-webkit-scrollbar-thumb:hover { background: #22d3ee; }
+/* Mencegah Konten Meluap (Penyebab Desktop View) */
+main {
+  width: 100%;
+  max-width: 100vw;
+  overflow-x: hidden;
+}
