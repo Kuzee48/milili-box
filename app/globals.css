@@ -2,40 +2,34 @@
 @tailwind components;
 @tailwind utilities;
 
-:root {
-  color-scheme: dark;
-}
-
 body {
-  background-color: #020617;
-  color: #f8fafc;
+  background-color: #010413;
+  color: #ffffff;
   -webkit-font-smoothing: antialiased;
+  -webkit-tap-highlight-color: transparent;
 }
 
-/* RESET LINK & WARNA BIRU */
-a, a:hover, a:visited, a:active {
+/* RESET SEMUA LINK */
+a {
   color: inherit !important;
   text-decoration: none !important;
 }
 
-/* Animasi Salju Premium di Background */
+/* Scrollbar Sembunyi tapi tetap bisa scroll */
+.no-scrollbar::-webkit-scrollbar { display: none; }
+.no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
+
+/* Salju di Background */
 .snowflake {
   position: fixed;
   top: -10px;
-  z-index: -1;
+  z-index: 0;
   color: white;
-  opacity: 0.15;
+  opacity: 0.2;
   pointer-events: none;
-  animation: fall 10s linear infinite;
+  animation: fall 12s linear infinite;
 }
 
 @keyframes fall {
   to { transform: translateY(100vh) rotate(360deg); }
-}
-
-/* Mencegah Konten Meluap (Penyebab Desktop View) */
-main {
-  width: 100%;
-  max-width: 100vw;
-  overflow-x: hidden;
 }
