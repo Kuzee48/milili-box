@@ -1,54 +1,54 @@
 export const dynamic = 'force-dynamic';
 import { getDetail } from "@/lib/api";
 import Link from "next/link";
-import { List, Play } from "lucide-react";
+import { List, ChevronLeft } from "lucide-react";
 
 export default async function DetailPage({ params }) {
   const res = await getDetail(params.id);
   const data = res?.data?.video_data;
 
-  if (!data) return <div className="p-20 text-center">Drama tidak ditemukan...</div>;
+  if (!data) return <div className="p-20 text-center text-white">Drama tidak ditemukan...</div>;
 
   const proxiedCover = `/api/image?url=${encodeURIComponent(data.series_cover)}`;
 
   return (
-    <div className="max-w-md mx-auto min-h-screen bg-[#020617] pb-10">
-      {/* Header Info */}
-      <div className="p-6 flex gap-4 border-b border-white/5">
-        <img src={proxiedCover} className="w-24 h-32 rounded-lg object-cover shadow-lg" alt="" />
-        <div className="flex-1">
-          <h1 className="text-xl font-bold leading-tight">{data.series_title}</h1>
-          <div className="mt-2 flex flex-wrap gap-1">
-            {JSON.parse(data.category_schema || "[]").slice(0, 3).map((c, i) => (
-              <span key={i} className="text-[10px] bg-white/10 px-2 py-0.5 rounded text-slate-300">
-                {c.name}
-              </span>
-            ))}
-          </div>
+    <div className="max-w-md mx-auto min-h-screen bg-[#020617] text-white shadow-2xl border-x border-white/5">
+      {/* Tombol Back & Cover */}
+      <div className="relative h-72 w-full">
+        <Link href="/" className="absolute top-4 left-4 z-10 p-2 bg-black/40 backdrop-blur-md rounded-full border border-white/10">
+          <ChevronLeft className="w-6 h-6 text-white" />
+        </Link>
+        <img src={proxiedCover} className="w-full h-full object-cover" alt="" />
+        <div className="absolute inset-0 bg-gradient-to-t from-[#020617] to-transparent" />
+        <div className="absolute bottom-4 left-6 right-6">
+          <h1 className="text-2xl font-black tracking-tight leading-tight drop-shadow-lg">{data.series_title}</h1>
         </div>
       </div>
 
-      {/* Deskripsi */}
-      <div className="p-6">
-        <p className="text-xs text-slate-400 leading-relaxed italic line-clamp-3">
-          "{data.series_intro}"
-        </p>
-      </div>
+      {/* Info & Deskripsi */}
+      <div className="px-6 py-4">
+        <div className="flex gap-2 mb-4 overflow-x-auto no-scrollbar">
+          {JSON.parse(data.category_schema || "[]").map((c, i) => (
+            <span key={i} className="text-[10px] bg-cyan-500/20 text-cyan-400 px-3 py-1 rounded-full whitespace-nowrap border border-cyan-500/20 font-bold">
+              {c.name}
+            </span>
+          ))}
+        </div>
+        <p className="text-xs text-slate-400 leading-relaxed italic opacity-80 mb-6">"{data.series_intro}"</p>
 
-      {/* Grid Episode ala Foto yang Anda Kirim */}
-      <div className="px-6">
-        <div className="flex items-center gap-2 mb-4 text-cyan-400">
-          <List className="w-4 h-4" />
-          <span className="text-sm font-bold uppercase tracking-wider">Episode List</span>
+        {/* EPISODE LIST GRID (6 KOLOM) */}
+        <div className="flex items-center gap-2 mb-4 text-white">
+          <List className="w-4 h-4 text-cyan-400" />
+          <span className="text-sm font-bold uppercase tracking-widest">Episode List ({data.episode_cnt})</span>
         </div>
         
-        <div className="grid grid-cols-6 gap-2">
+        <div className="grid grid-cols-6 gap-2 mb-10">
           {(data.video_list || []).map((ep) => (
             <Link 
               href={`/play/${ep.vid}`} 
               key={ep.vid}
-              className={`aspect-square flex items-center justify-center rounded-md text-sm font-bold transition-all border border-white/5 
-                ${ep.vid_index === 1 ? 'bg-pink-300 text-slate-900' : 'bg-slate-800 text-slate-400 hover:bg-slate-700'}`}
+              className={`aspect-square flex items-center justify-center rounded-lg text-xs font-black transition-all border border-white/5
+                ${ep.vid_index === 1 ? 'bg-[#FF99CC] text-black shadow-[0_0_15px_rgba(255,153,204,0.4)]' : 'bg-slate-800/80 text-slate-300 hover:bg-cyan-600'}`}
             >
               {ep.vid_index}
             </Link>
@@ -57,4 +57,4 @@ export default async function DetailPage({ params }) {
       </div>
     </div>
   );
-    }
+}
