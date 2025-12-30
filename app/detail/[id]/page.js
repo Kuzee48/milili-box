@@ -1,54 +1,58 @@
 export const dynamic = 'force-dynamic';
 import { getDetail } from "@/lib/api";
 import Link from "next/link";
-import { List } from "lucide-react";
+import { List, Play } from "lucide-react";
 
 export default async function DetailPage({ params }) {
-  const response = await getDetail(params.id);
-  const data = response?.data?.video_data;
+  const res = await getDetail(params.id);
+  const data = res?.data?.video_data;
 
-  if (!data) return <div className="p-20 text-center text-slate-500 font-italic">Drama membeku di musim dingin...</div>;
+  if (!data) return <div className="p-20 text-center">Drama tidak ditemukan...</div>;
 
   const proxiedCover = `/api/image?url=${encodeURIComponent(data.series_cover)}`;
 
   return (
-    <div className="min-h-screen">
-      {/* Background Banner */}
-      <div className="fixed top-0 left-0 w-full h-[60vh] -z-10 opacity-20 blur-2xl">
-        <img src={proxiedCover} className="w-full h-full object-cover" alt="" />
-      </div>
-
-      <div className="max-w-5xl mx-auto px-6 pt-10 pb-20">
-        <div className="flex flex-col items-center text-center mb-12">
-          <img 
-            src={proxiedCover} 
-            className="w-48 md:w-64 rounded-3xl shadow-[0_0_50px_rgba(34,211,238,0.2)] border-4 border-white/10 mb-8" 
-            alt={data.series_title} 
-          />
-          <h1 className="text-3xl md:text-5xl font-black text-white mb-4 tracking-tighter drop-shadow-xl">
-            {data.series_title}
-          </h1>
-          <p className="text-slate-400 text-sm md:text-base max-w-2xl leading-relaxed italic">
-            "{data.series_intro}"
-          </p>
-        </div>
-
-        {/* Episode Grid */}
-        <div className="bg-slate-900/60 backdrop-blur-xl rounded-[2.5rem] p-8 md:p-12 border border-white/5 shadow-2xl">
-          <h2 className="flex items-center justify-center gap-3 text-2xl font-black mb-10 text-cyan-400 uppercase tracking-widest">
-            <List className="w-6 h-6" /> Episode List
-          </h2>
-          <div className="grid grid-cols-4 sm:grid-cols-6 md:grid-cols-8 lg:grid-cols-10 gap-3">
-            {(data.video_list || []).map((ep) => (
-              <Link 
-                href={`/play/${ep.vid}`} 
-                key={ep.vid}
-                className="aspect-square flex items-center justify-center rounded-2xl bg-white/5 hover:bg-cyan-500 hover:scale-110 transition-all font-bold text-white shadow-lg border border-white/5"
-              >
-                {ep.vid_index}
-              </Link>
+    <div className="max-w-md mx-auto min-h-screen bg-[#020617] pb-10">
+      {/* Header Info */}
+      <div className="p-6 flex gap-4 border-b border-white/5">
+        <img src={proxiedCover} className="w-24 h-32 rounded-lg object-cover shadow-lg" alt="" />
+        <div className="flex-1">
+          <h1 className="text-xl font-bold leading-tight">{data.series_title}</h1>
+          <div className="mt-2 flex flex-wrap gap-1">
+            {JSON.parse(data.category_schema || "[]").slice(0, 3).map((c, i) => (
+              <span key={i} className="text-[10px] bg-white/10 px-2 py-0.5 rounded text-slate-300">
+                {c.name}
+              </span>
             ))}
           </div>
+        </div>
+      </div>
+
+      {/* Deskripsi */}
+      <div className="p-6">
+        <p className="text-xs text-slate-400 leading-relaxed italic line-clamp-3">
+          "{data.series_intro}"
+        </p>
+      </div>
+
+      {/* Grid Episode ala Foto yang Anda Kirim */}
+      <div className="px-6">
+        <div className="flex items-center gap-2 mb-4 text-cyan-400">
+          <List className="w-4 h-4" />
+          <span className="text-sm font-bold uppercase tracking-wider">Episode List</span>
+        </div>
+        
+        <div className="grid grid-cols-6 gap-2">
+          {(data.video_list || []).map((ep) => (
+            <Link 
+              href={`/play/${ep.vid}`} 
+              key={ep.vid}
+              className={`aspect-square flex items-center justify-center rounded-md text-sm font-bold transition-all border border-white/5 
+                ${ep.vid_index === 1 ? 'bg-pink-300 text-slate-900' : 'bg-slate-800 text-slate-400 hover:bg-slate-700'}`}
+            >
+              {ep.vid_index}
+            </Link>
+          ))}
         </div>
       </div>
     </div>
