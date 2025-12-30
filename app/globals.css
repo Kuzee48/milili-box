@@ -9,17 +9,17 @@ body {
   -webkit-tap-highlight-color: transparent;
 }
 
-/* RESET SEMUA LINK */
-a {
+/* RESET WARNA BIRU LINK */
+a, a:active, a:hover, a:visited {
   color: inherit !important;
   text-decoration: none !important;
 }
 
-/* Scrollbar Sembunyi tapi tetap bisa scroll */
+/* Scrollbar Sembunyi */
 .no-scrollbar::-webkit-scrollbar { display: none; }
 .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
 
-/* Salju di Background */
+/* Salju Background (Z-index 0) */
 .snowflake {
   position: fixed;
   top: -10px;
