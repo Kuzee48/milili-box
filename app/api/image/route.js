@@ -8,7 +8,6 @@ export async function GET(request) {
   if (!imageUrl) return new Response('URL missing', { status: 400 });
 
   try {
-    // 1. Ambil data asli dari CDN (seperti tiktok/fizzopic)
     const response = await fetch(imageUrl, {
       headers: {
         'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36',
@@ -16,25 +15,21 @@ export async function GET(request) {
       },
     });
 
-    if (!response.ok) throw new Error('Gagal mengambil gambar dari sumber');
-
-    const inputBuffer = await response.arrayBuffer();
-
-    // 2. KONVERSI MENGGUNAKAN SHARP
-    // Kita ubah HEIC/format lain menjadi JPEG dengan kualitas optimal
-    const outputBuffer = await sharp(Buffer.from(inputBuffer))
-      .jpeg({ quality: 80 }) 
+    const arrayBuffer = await response.arrayBuffer();
+    
+    // KONVERSI HEIC/JPG/PNG -> JPEG menggunakan Sharp
+    const buffer = await sharp(Buffer.from(arrayBuffer))
+      .jpeg({ quality: 80 })
       .toBuffer();
 
-    // 3. Kirim hasilnya ke browser
-    return new NextResponse(outputBuffer, {
-      headers: {
+    return new NextResponse(buffer, {
+      headers: { 
         'Content-Type': 'image/jpeg',
-        'Cache-Control': 'public, max-age=31536000, immutable',
+        'Cache-Control': 'public, max-age=31536000, immutable'
       },
     });
-  } catch (error) {
-    console.error('Sharp Error:', error);
-    return new Response('Konversi Gagal', { status: 500 });
+  } catch (e) {
+    console.error("Sharp Error:", e);
+    return new Response('Fail', { status: 500 });
   }
 }
