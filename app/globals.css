@@ -5,31 +5,30 @@
 body {
   background-color: #010413;
   color: #ffffff;
-  -webkit-font-smoothing: antialiased;
   -webkit-tap-highlight-color: transparent;
 }
 
-/* RESET WARNA BIRU LINK */
+/* ANTI LINK BIRU */
 a, a:active, a:hover, a:visited {
   color: inherit !important;
   text-decoration: none !important;
 }
 
-/* Scrollbar Sembunyi */
-.no-scrollbar::-webkit-scrollbar { display: none; }
-.no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
+/* Container Mobile */
+main {
+  width: 100%;
+  max-width: 100vw;
+  overflow-x: hidden;
+}
 
-/* Salju Background (Z-index 0) */
+/* Salju */
 .snowflake {
   position: fixed;
   top: -10px;
   z-index: 0;
   color: white;
-  opacity: 0.2;
+  opacity: 0.1;
   pointer-events: none;
-  animation: fall 12s linear infinite;
+  animation: fall 15s linear infinite;
 }
-
-@keyframes fall {
-  to { transform: translateY(100vh) rotate(360deg); }
-}
+@keyframes fall { to { transform: translateY(100vh); } }
